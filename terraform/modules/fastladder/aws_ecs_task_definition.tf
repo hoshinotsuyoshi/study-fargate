@@ -1,5 +1,10 @@
 resource "aws_ecs_task_definition" "fastladder_rails" {
-  family = "${var.resource_base_name}_rails"
+  family                   = "${var.resource_base_name}_rails"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  execution_role_arn       = "arn:aws:iam::${var.aws_account_id}:role/ecsTaskExecutionRole"
+  cpu                      = 256
+  memory                   = 512
 
   container_definitions = <<-JSON
   [
@@ -14,7 +19,9 @@ resource "aws_ecs_task_definition" "fastladder_rails" {
           "awslogs-stream-prefix": "rails"
         }
       },
-      "memory": 300,
+      "cpu": 256,
+      "memory": 512,
+      "networkMode": "awsvpc",
       "name": "${var.resource_base_name}_rails",
       "portMappings": [
         {
@@ -28,7 +35,12 @@ resource "aws_ecs_task_definition" "fastladder_rails" {
 }
 
 resource "aws_ecs_task_definition" "fastladder_rails_db_setup" {
-  family = "${var.resource_base_name}_rails_db_setup"
+  family                   = "${var.resource_base_name}_rails_db_setup"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  execution_role_arn       = "arn:aws:iam::${var.aws_account_id}:role/ecsTaskExecutionRole"
+  cpu                      = 256
+  memory                   = 512
 
   container_definitions = <<-JSON
   [
@@ -44,7 +56,8 @@ resource "aws_ecs_task_definition" "fastladder_rails_db_setup" {
           "awslogs-stream-prefix": "rails"
         }
       },
-      "memory": 300,
+      "cpu": 256,
+      "memory": 512,
       "networkMode": "awsvpc",
       "name": "${var.resource_base_name}_rails"
     }

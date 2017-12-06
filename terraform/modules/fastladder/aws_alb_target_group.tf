@@ -14,6 +14,8 @@ resource "aws_alb_target_group" "fastladder_rails" {
   port     = 80
   protocol = "HTTP"
 
+  target_type = "ip"
+
   stickiness {
     type = "lb_cookie"
   }
